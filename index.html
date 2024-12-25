@@ -1,20 +1,22 @@
+بالطبع، سأقوم بإعداد كود HTML وCSS وJavaScript يتيح لك عرض الفيديوهات باستخدام عناصر `<iframe>`، مع تحسين تصميم قسم البث المباشر وقسم الأفلام. سأحرص على تصميم مرن وجذاب يمكن تخصيصه بسهولة. إليك الكود:
+
+```html
 <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>موقع البث والأفلام</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #ecf0f1;
+            background-color: #f4f4f9;
             color: #34495e;
         }
         header {
-            background-color: #2c3e50;
+            background-color: #34495e;
             color: white;
             padding: 20px;
             text-align: center;
@@ -42,7 +44,6 @@
         main {
             padding: 20px;
             text-align: center;
-            margin-top: 10px;
         }
         .section {
             background-color: #3498db;
@@ -65,15 +66,28 @@
             display: none;
             margin-top: 20px;
         }
-        video {
+        .video-frame {
             width: 100%;
-            max-width: 800px;
-            border-radius: 10px;
-            border: solid 2px #bdc3c7;
+            max-width: 510px;
+            height: 400px;
+            border: none;
+            border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        #channels .channel {
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+        }
+        #channels .channel:hover {
+            background-color: #bdc3c7;
         }
         footer {
-            background-color: #2c3e50;
+            background-color: #34495e;
             color: white;
             text-align: center;
             padding: 10px 0;
@@ -82,132 +96,23 @@
             bottom: 0;
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
-        .login-container {
-            background-color: #2f2f2f;
-            border-radius: 8px;
-            box-shadow: rgb(31 31 31 / 17%) 0px -23px 25px 0px inset,
-                rgb(108 108 108 / 23%) 0px -36px 30px 0px inset,
-                rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
-                rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
-                rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-            padding: 40px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            margin: 40px auto;
-        }
-        .login-form {
-            display: flex;
-            flex-direction: column;
-        }
-        .heading {
-            color: #ffffff;
-            font-weight: 500;
-            font-size: 40px;
-            margin-bottom: 5px;
-        }
-        .paragraph {
-            color: #ffffff;
-            font-weight: 400;
-            font-size: 15px;
-            margin-bottom: 15px;
-        }
-        .input-group {
-            margin-bottom: 20px;
-        }
-        .input-group input {
-            background: none;
-            border: 1px solid #353535;
-            padding: 15px 23px;
-            font-size: 16px;
-            border-radius: 8px;
-            color: #979797;
-            width: 100%;
-            box-shadow: rgb(136 136 136 / 17%) 0px -23px 25px 0px inset,
-                rgb(81 81 81 / 23%) 0px -36px 30px 0px inset,
-                rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
-                rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
-                rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-        }
-        .input-group input:focus {
-            border-color: #0173ed;
-            outline: none;
-        }
-        button {
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            background-color: #0173ed;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0173ed;
-        }
-        .bottom-text {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 400;
-        }
-        .bottom-text a {
-            color: #0173ed;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .bottom-text a:hover {
-            color: #3f95f2;
-        }
-        #codeInput {
-            display: none;
-            margin-top: 20px;
-        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            $("form.login-form").submit(function(event) {
-                event.preventDefault();
-                const username = $("#username").val();
-                const password = $("#password").val();
-                if (username === "hosnitheking" && password === "hosnitheking") {
-                    $(".login-container").hide();
-                    $("#options").show();
-                } else {
-                    alert("خطأ في اسم المستخدم أو كلمة المرور");
-                }
-            });
-
             $("#liveBroadcast").click(function() {
                 $("#options").hide();
                 $("#channels").show();
             });
 
             $("#moviesSection").click(function() {
-                $("#codeInput").show();
-            });
-
-            $("#submitCode").click(function() {
-                const code = $("#code").val();
-                if (code === "2239") {
-                    $("#codeInput").hide();
-                    $("#options").hide();
-                    $("#movies").show();
-                } else {
-                    alert("الكود غير صحيح");
-                }
+                $("#options").hide();
+                $("#movies").show();
             });
 
             $(".channel").click(function() {
                 const videoUrl = $(this).data("video");
                 $("#videoSource").attr("src", videoUrl);
-                $("#videoPlayer")[0].load();
                 $("#videoContainer").show();
             });
         });
@@ -220,42 +125,15 @@
                 <li><a href="#home">الرئيسية</a></li>
                 <li><a href="#channels">البث المباشر</a></li>
                 <li><a href="#movies">الأفلام</a></li>
-                <li><a href="#login">تسجيل الدخول</a></li>
             </ul>
         </nav>
         <h1>مرحبًا بكم في موقع البث والأفلام</h1>
     </header>
     <main>
-        <!-- نموذج تسجيل الدخول -->
-        <section id="login" class="login-container">
-            <form class="login-form">
-                <p class="heading">Login</p>
-                <p class="paragraph">Login to your account</p>
-                <div class="input-group">
-                    <input required placeholder="Username" id="username" type="text"/>
-                </div>
-                <div class="input-group">
-                    <input required placeholder="Password" id="password" type="password"/>
-                </div>
-                <button type="submit">Login</button>
-                <div class="bottom-text">
-                    <p>Don't have an account? <a href="#">Sign Up</a></p>
-                    <p><a href="#">Forgot password?</a></p>
-                </div>
-            </form>
-        </section>
-
         <!-- خيارات بعد تسجيل الدخول -->
-        <section id="options" style="display: none;">
+        <section id="options">
             <div id="liveBroadcast" class="section">البث المباشر</div>
             <div id="moviesSection" class="section">الأفلام</div>
-        </section>
-
-        <!-- إدخال الكود للوصول إلى الأفلام -->
-        <section id="codeInput">
-            <p>الرجاء إدخال الكود للوصول إلى قسم الأفلام:</p>
-            <input type="text" id="code" placeholder="أدخل الكود هنا"/>
-            <button id="submitCode">تأكيد</button>
         </section>
 
         <!-- قسم القنوات -->
@@ -264,25 +142,21 @@
             <div class="channel" data-video="http://het131a.4rouwanda-shop.store/live/918454578001/index.m3u8?t=8jkikFIdtbpikGQ_mMm7Sg&e=1734890215">Bein 1</div>
             <div class="channel" data-video="http://het120a.4rouwanda-shop.store/live/69854211/index.m3u8?t=qNvUJEROxN2ML_tyD57-_w&e=1734890209">Bein 2</div>
             <div class="channel" data-video="http://het111a.4rouwanda-shop.store/live/645587700/index.m3u8?t=3A5-cdbVcfm8QHwNYANQLA&e=1734890210">Bein 3</div>
-            <div class="channel" data-video="http://het108a.4rouwanda-shop.store/live/9787488847/index.m3u8?t=AqJ3shHRDaxRHnR3XZqT5g&e=1734890359">Bein 4</div>
-            <div class="channel" data-video="http://het128a.4rouwanda-shop.store/live/610303030/index.m3u8?t=qzVpxwlMHxJA3iUPSvJXDg&e=1734890380">Bein 5</div>
-            <div class="channel" data-video="http://het121a.4rouwanda-shop.store/live/33523510/index.m3u8?t=LhQtBahS88474JtU5eF2Vw&e=1734890618">Bein 7</div>
-            <div class="channel" data-video="http://het127a.4rouwanda-shop.store/live/996251000/index.m3u8?t=heAZ_VuOSjVy1Vv_I-dipQ&e=1734890556">Bein 8</div>
         </section>
 
         <!-- قسم الأفلام -->
         <section id="movies">
             <h2>الأفلام المتاحة</h2>
-            <p>هنا قائمة الأفلام:</p>
-            <!-- يمكنك إضافة قائمة الأفلام هنا -->
+            <div class="video-container">
+                <iframe class="video-frame" src="<iframe src="https://www.xnxx.com/embedframe/kbouodd9d2f" frameborder=0 width=510 height=400 scrolling=no allowfullscreen=allowfullscreen></iframe>" allowfullscreen></iframe>
+                <iframe class="video-frame" src="https://www.example.com/embed/video2" allowfullscreen></iframe>
+                <iframe class="video-frame" src="https://www.example.com/embed/video3" allowfullscreen></iframe>
+            </div>
         </section>
 
         <!-- مشغل الفيديو -->
         <section id="videoContainer" class="video-container">
-            <video id="videoPlayer" controls>
-                <source id="videoSource" src="" type="application/x-mpegURL">
-                متصفحك لا يدعم عرض الفيديو.
-            </video>
+            <iframe id="videoSource" class="video-frame" src="" allowfullscreen></iframe>
         </section>
     </main>
     <footer>
