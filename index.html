@@ -1,4 +1,4 @@
-بالطبع، سأقوم بإعداد كود HTML وCSS وJavaScript يتيح لك عرض الفيديوهات باستخدام عناصر `<iframe>`، مع تحسين تصميم قسم البث المباشر وقسم الأفلام. سأحرص على تصميم مرن وجذاب يمكن تخصيصه بسهولة. إليك الكود:
+لإضافة الفيديو إلى قسم الأفلام باستخدام `<iframe>`, مع الأخذ في الاعتبار أن الرابط ينتمي إلى موقع بث مباشر، يمكنك استخدام الكود التالي. سأقوم بتضمين الفيديو داخل قسم الأفلام في صفحة HTML كاملة:
 
 ```html
 <!DOCTYPE html>
@@ -62,8 +62,7 @@
             transform: scale(1.05);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .video-container, #channels, #movies {
-            display: none;
+        .video-container {
             margin-top: 20px;
         }
         .video-frame {
@@ -74,17 +73,6 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-        }
-        #channels .channel {
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            padding: 10px;
-            background-color: #ecf0f1;
-            border-radius: 8px;
-        }
-        #channels .channel:hover {
-            background-color: #bdc3c7;
         }
         footer {
             background-color: #34495e;
@@ -97,26 +85,6 @@
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#liveBroadcast").click(function() {
-                $("#options").hide();
-                $("#channels").show();
-            });
-
-            $("#moviesSection").click(function() {
-                $("#options").hide();
-                $("#movies").show();
-            });
-
-            $(".channel").click(function() {
-                const videoUrl = $(this).data("video");
-                $("#videoSource").attr("src", videoUrl);
-                $("#videoContainer").show();
-            });
-        });
-    </script>
 </head>
 <body>
     <header>
@@ -130,33 +98,11 @@
         <h1>مرحبًا بكم في موقع البث والأفلام</h1>
     </header>
     <main>
-        <!-- خيارات بعد تسجيل الدخول -->
-        <section id="options">
-            <div id="liveBroadcast" class="section">البث المباشر</div>
-            <div id="moviesSection" class="section">الأفلام</div>
-        </section>
-
-        <!-- قسم القنوات -->
-        <section id="channels">
-            <h2>القنوات المتاحة</h2>
-            <div class="channel" data-video="http://het131a.4rouwanda-shop.store/live/918454578001/index.m3u8?t=8jkikFIdtbpikGQ_mMm7Sg&e=1734890215">Bein 1</div>
-            <div class="channel" data-video="http://het120a.4rouwanda-shop.store/live/69854211/index.m3u8?t=qNvUJEROxN2ML_tyD57-_w&e=1734890209">Bein 2</div>
-            <div class="channel" data-video="http://het111a.4rouwanda-shop.store/live/645587700/index.m3u8?t=3A5-cdbVcfm8QHwNYANQLA&e=1734890210">Bein 3</div>
-        </section>
-
-        <!-- قسم الأفلام -->
         <section id="movies">
             <h2>الأفلام المتاحة</h2>
             <div class="video-container">
-                <iframe class="video-frame" src="<iframe src="https://www.xnxx.com/embedframe/kbouodd9d2f" frameborder=0 width=510 height=400 scrolling=no allowfullscreen=allowfullscreen></iframe>" allowfullscreen></iframe>
-                <iframe class="video-frame" src="https://www.example.com/embed/video2" allowfullscreen></iframe>
-                <iframe class="video-frame" src="https://www.example.com/embed/video3" allowfullscreen></iframe>
+                <iframe class="video-frame" src="https://www.xnxx.com/embedframe/kbouodd9d2f" allowfullscreen></iframe>
             </div>
-        </section>
-
-        <!-- مشغل الفيديو -->
-        <section id="videoContainer" class="video-container">
-            <iframe id="videoSource" class="video-frame" src="" allowfullscreen></iframe>
         </section>
     </main>
     <footer>
