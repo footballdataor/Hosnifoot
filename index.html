@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع بث المباريات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ecf0f1;
+            color: #34495e;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a, nav ul li button {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover, nav ul li button:hover {
+            color: #1abc9c;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .channel {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
+            width: calc(33% - 20px);
+            box-sizing: border-box;
+            position: relative;
+        }
+        .channel:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .video-container {
+            display: none;
+            margin-top: 20px;
+        }
+        video {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 10px;
+            border: solid 2px #bdc3c7;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+        /* CSS لنموذج تسجيل الدخول */
+        .login-container {
+            background-color: #2f2f2f;
+            border-radius: 8px;
+            box-shadow: rgb(31 31 31 / 17%) 0px -23px 25px 0px inset,
+                rgb(108 108 108 / 23%) 0px -36px 30px 0px inset,
+                rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+                rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+                rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            margin: 40px auto;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .heading {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+        .paragraph {
+            color: #ffffff;
+            font-weight: 400;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group input {
+            background: none;
+            border: 1px solid #353535;
+            padding: 15px 23px;
+            font-size: 16px;
+            border-radius: 8px;
+            color: #979797;
+            width: 100%;
+            box-shadow: rgb(136 136 136 / 17%) 0px -23px 25px 0px inset,
+                rgb(81 81 81 / 23%) 0px -36px 30px 0px inset,
+                rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+                rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+                rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+        }
+        .input-group input:focus {
+            border-color: #0173ed;
+            outline: none;
+        }
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #0173ed;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0173ed;
+        }
+        .bottom-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 400;
+        }
+        .bottom-text a {
+            color: #0173ed;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .bottom-text a:hover {
+            color: #3f95f2;
+        }
+        /* إخفاء قسم البث المباشر بشكل افتراضي */
+        #channels {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("form.login-form").submit(function(event) {
+                event.preventDefault();
+                const username = $("#username").val();
+                const password = $("#password").val();
+                if (username === "hosnitheking" && password === "hosnitheking") {
+                    $(".login-container").hide();
+                    $("#channels").show();
+                    $("#videoContainer").hide(); // إخفاء الفيديو حتى يتم اختيار قناة
+                } else {
+                    alert("خطأ في اسم المستخدم أو كلمة المرور");
+                }
+            });
+
+            $(".channel").click(function() {
+                const videoUrl = $(this).data("video");
+                $("#videoSource").attr("src", videoUrl);
+                $("#videoPlayer")[0].load();
+                $("#videoContainer").show();
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">الرئيسية</a></li>
+                <li><a href="#channels">القنوات</a></li>
+                <li><a href="#favorites">المفضلة</a></li>
+                <li><a href="#login">تسجيل الدخول</a></li>
+            </ul>
+        </nav>
+        <h1>مرحبًا بكم في موقع بث المباريات</h1>
+    </header>
+    <main>
+        <!-- نموذج تسجيل الدخول -->
+        <section id="login" class="login-container">
+            <form class="login-form">
+                <p class="heading">Login</p>
+                <p class="paragraph">Login to your account</p>
+                <div class="input-group">
+                    <input required placeholder="Username" id="username" type="text"/>
+                </div>
+                <div class="input-group">
+                    <input required placeholder="Password" id="password" type="password"/>
+                </div>
+                <button type="submit">Login</button>
+                <div class="bottom-text">
+                    <p>Don't have an account? <a href="#">Sign Up</a></p>
+                    <p><a href="#">Forgot password?</a></p>
+                </div>
+            </form>
+        </section>
+
+        <!-- قسم القنوات -->
+        <section id="channels">
+            <h2>القنوات المتاحة</h2>
+            <div class="channel" data-video="http://het131a.4rouwanda-shop.store/live/918454578001/index.m3u8?t=8jkikFIdtbpikGQ_mMm7Sg&e=1734890215">Bein 1</div>
+            <div class="channel" data-video="http://het120a.4rouwanda-shop.store/live/69854211/index.m3u8?t=qNvUJEROxN2ML_tyD57-_w&e=1734890209">Bein 2</div>
+            <div class="channel" data-video="http://het111a.4rouwanda-shop.store/live/645587700/index.m3u8?t=3A5-cdbVcfm8QHwNYANQLA&e=1734890210">Bein 3</div>
+            <div class="channel" data-video="http://het108a.4rouwanda-shop.store/live/9787488847/index.m3u8?t=AqJ3shHRDaxRHnR3XZqT5g&e=1734890359">Bein 4</div>
+            <div class="channel" data-video="http://het128a.4rouwanda-shop.store/live/610303030/index.m3u8?t=qzVpxwlMHxJA3iUPSvJXDg&e=1734890380">Bein 5</div>
+            <div class="channel" data-video="http://het121a.4rouwanda-shop.store/live/33523510/index.m3u8?t=LhQtBahS88474JtU5eF2Vw&e=1734890618">Bein 7</div>
+            <div class="channel" data-video="http://het127a.4rouwanda-shop.store/live/996251000/index.m3u8?t=heAZ_VuOSjVy1Vv_I-dipQ&e=1734890556">Bein 8</div>
+        </section>
+
+        <!-- مشغل الفيديو -->
+        <section id="videoContainer" class="video-container">
+            <video id="videoPlayer" controls>
+                <source id="videoSource" src="" type="application/x-mpegURL">
+                متصفحك لا يدعم عرض الفيديو.
+            </video>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 موقع بث المباريات</p>
+    </footer>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع بث المباريات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ecf0f1;
+            color: #34495e;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a, nav ul li button {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover, nav ul li button:hover {
+            color: #1abc9c;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .channel {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
+            width: calc(33% - 20px);
+            box-sizing: border-box;
+            position: relative;
+        }
+        .channel:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .video-container {
+            display: none;
+            margin-top: 20px;
+        }
+        video {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 10px;
+            border: solid 2px #bdc3c7;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+        /* CSS لنموذج تسجيل الدخول */
+        .login-container {
+            background-color: #2f2f2f;
+            border-radius: 8px;
+            box-shadow: rgb(31 31 31 / 17%) 0px -23px 25px 0px inset,
+                rgb(108 108 108 / 23%) 0px -36px 30px 0px inset,
+                rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+                rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+                rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            margin: 40px auto;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .heading {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+        .paragraph {
+            color: #ffffff;
+            font-weight: 400;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group input {
+            background: none;
+            border: 1px solid #353535;
+            padding: 15px 23px;
+            font-size: 16px;
+            border-radius: 8px;
+            color: #979797;
+            width: 100%;
+            box-shadow: rgb(136 136 136 / 17%) 0px -23px 25px 0px inset,
+                rgb(81 81 81 / 23%) 0px -36px 30px 0px inset,
+                rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+                rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+                rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+        }
+        .input-group input:focus {
+            border-color: #0173ed;
+            outline: none;
+        }
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #0173ed;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0173ed;
+        }
+        .bottom-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 400;
+        }
+        .bottom-text a {
+            color: #0173ed;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .bottom-text a:hover {
+            color: #3f95f2;
+        }
+        /* إخفاء قسم البث المباشر بشكل افتراضي */
+        #channels {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("form.login-form").submit(function(event) {
+                event.preventDefault();
+                const username = $("#username").val();
+                const password = $("#password").val();
+                if (username === "hosnitheking" && password === "hosnitheking") {
+                    $(".login-container").hide();
+                    $("#channels").show();
+                    $("#videoContainer").hide(); // إخفاء الفيديو حتى يتم اختيار قناة
+                } else {
+                    alert("خطأ في اسم المستخدم أو كلمة المرور");
+                }
+            });
+
+            $(".channel").click(function() {
+                const videoUrl = $(this).data("video");
+                $("#videoSource").attr("src", videoUrl);
+                $("#videoPlayer")[0].load();
+                $("#videoContainer").show();
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">الرئيسية</a></li>
+                <li><a href="#channels">القنوات</a></li>
+                <li><a href="#favorites">المفضلة</a></li>
+                <li><a href="#login">تسجيل الدخول</a></li>
+            </ul>
+        </nav>
+        <h1>مرحبًا بكم في موقع بث المباريات</h1>
+    </header>
+    <main>
+        <!-- نموذج تسجيل الدخول -->
+        <section id="login" class="login-container">
+            <form class="login-form">
+                <p class="heading">Login</p>
+                <p class="paragraph">Login to your account</p>
+                <div class="input-group">
+                    <input required placeholder="Username" id="username" type="text"/>
+                </div>
+                <div class="input-group">
+                    <input required placeholder="Password" id="password" type="password"/>
+                </div>
+                <button type="submit">Login</button>
+                <div class="bottom-text">
+                    <p>Don't have an account? <a href="#">Sign Up</a></p>
+                    <p><a href="#">Forgot password?</a></p>
+                </div>
+            </form>
+        </section>
+
+        <!-- قسم القنوات -->
+        <section id="channels">
+            <h2>القنوات المتاحة</h2>
+            <div class="channel" data-video="http://het131a.4rouwanda-shop.store/live/918454578001/index.m3u8?t=8jkikFIdtbpikGQ_mMm7Sg&e=1734890215">Bein 1</div>
+            <div class="channel" data-video="http://het120a.4rouwanda-shop.store/live/69854211/index.m3u8?t=qNvUJEROxN2ML_tyD57-_w&e=1734890209">Bein 2</div>
+            <div class="channel" data-video="http://het111a.4rouwanda-shop.store/live/645587700/index.m3u8?t=3A5-cdbVcfm8QHwNYANQLA&e=1734890210">Bein 3</div>
+            <div class="channel" data-video="http://het108a.4rouwanda-shop.store/live/9787488847/index.m3u8?t=AqJ3shHRDaxRHnR3XZqT5g&e=1734890359">Bein 4</div>
+            <div class="channel" data-video="http://het128a.4rouwanda-shop.store/live/610303030/index.m3u8?t=qzVpxwlMHxJA3iUPSvJXDg&e=1734890380">Bein 5</div>
+            <div class="channel" data-video="http://het121a.4rouwanda-shop.store/live/33523510/index.m3u8?t=LhQtBahS88474JtU5eF2Vw&e=1734890618">Bein 7</div>
+            <div class="channel" data-video="http://het127a.4rouwanda-shop.store/live/996251000/index.m3u8?t=heAZ_VuOSjVy1Vv_I-dipQ&e=1734890556">Bein 8</div>
+        </section>
+
+        <!-- مشغل الفيديو -->
+        <section id="videoContainer" class="video-container">
+            <video id="videoPlayer" controls>
+                <source id="videoSource" src="" type="application/x-mpegURL">
+                متصفحك لا يدعم عرض الفيديو.
+            </video>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 موقع بث المباريات</p>
+    </footer>
+</body>
+</html>
